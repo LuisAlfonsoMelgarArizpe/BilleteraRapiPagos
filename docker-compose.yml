@@ -1,63 +1,63 @@
-version: '3.3'
+version: "3.3"
 
 services:
-   db:
-     container_name: MySQL
-     image: mysql:5.7
-     volumes:
-       - db_data:/var/lib/mysql
-     restart: always
-     environment:
-       MYSQL_ROOT_PASSWORD: billetera
-       MYSQL_DATABASE: billetera
-       MYSQL_USER: billetera
-       MYSQL_PASSWORD: billetera
-     ports:
-        - '3306:3306'
-    
-    api_billetera:
-      container_name: api_billetera
-      image: api_billetera
-      build:
-        dockerfile: Dockerfile
-        context: ./server/billetera
-      ports:
-        - '3000:3000'
-      depends_on:
-        - db
+  db:
+    container_name: MySQL
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: billetera
+      MYSQL_DATABASE: billetera
+      MYSQL_USER: billetera
+      MYSQL_PASSWORD: billetera
+    ports:
+      - "3306:3306"
 
-    api_reportes:
-      container_name: api_reportes
-      image: api_reportes
-      build:
-        dockerfile: Dockerfile
-        context: ./server/reportes
-      ports:
-        - '3001:3001'
-      depends_on:
-        - db
+  api_billetera:
+    container_name: api_billetera
+    image: api_billetera
+    build:
+      dockerfile: Dockerfile
+      context: ./server/billetera
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
 
-    api_trans:
-      container_name: api_trans
-      image: api_trans
-      build:
-        dockerfile: Dockerfile
-        context: ./server/trans
-      ports:
-        - '3002:3002'
-      depends_on:
-        - db
+  api_reportes:
+    container_name: api_reportes
+    image: api_reportes
+    build:
+      dockerfile: Dockerfile
+      context: ./server/reportes
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
 
-    api_usuarios:
-      container_name: api_usuarios
-      image: api_usuarios
-      build:
-        dockerfile: Dockerfile
-        context: ./server/usuarios
-      ports:
-        - '3003:3003'
-      depends_on:
-        - db
+  api_trans:
+    container_name: api_trans
+    image: api_trans
+    build:
+      dockerfile: Dockerfile
+      context: ./server/trans
+    ports:
+      - "3002:3002"
+    depends_on:
+      - db
+
+  api_usuarios:
+    container_name: api_usuarios
+    image: api_usuarios
+    build:
+      dockerfile: Dockerfile
+      context: ./server/usuarios
+    ports:
+      - "3003:3003"
+    depends_on:
+      - db
 
 volumes:
-    db_data: {}
+  db_data: {}
