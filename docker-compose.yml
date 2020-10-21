@@ -59,5 +59,16 @@ services:
     depends_on:
       - db
 
+  api_liquidaciones:
+    container_name: api_liquidaciones
+    image: api_liquidaciones
+    build:
+      dockerfile: Dockerfile
+      context: ./server/liquidaciones
+    ports:
+      - "3004:3004"
+    depends_on:
+      - db
+
 volumes:
   db_data: {}
