@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS billetera; 
 
+USE billetera;
+
 CREATE TABLE usuario (
     id           INTEGER NOT NULL,
     telefono     INTEGER NOT NULL,
