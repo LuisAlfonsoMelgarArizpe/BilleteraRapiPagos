@@ -3,11 +3,13 @@ version: "3.3"
 services:
   db:
     container_name: MySQL
-    image: mysql:5.7
-    command: mysql -uroot -pbilletera < ./db/dbscript.sql
+    image: db_mysql
     volumes:
       - db_data:/var/lib/mysql
     restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./db
     environment:
       MYSQL_ROOT_PASSWORD: billetera
       MYSQL_DATABASE: billetera
