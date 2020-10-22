@@ -5,7 +5,7 @@ services:
     container_name: MySQL
     image: db_mysql
     volumes:
-      - ./db/data:/docker-entrypoint-initdb.d
+      - ./db:/docker-entrypoint-initdb.d/
     restart: always
     build:
       dockerfile: Dockerfile
