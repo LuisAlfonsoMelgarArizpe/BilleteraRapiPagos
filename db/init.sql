@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS billetera;
 USE billetera;
 
 CREATE TABLE usuario (
-    id           INTEGER NOT NULL,
+    id           INTEGER NOT NULL AUTO_INCREMENT,
     telefono     INTEGER NOT NULL,
     nombre       VARCHAR(128) NOT NULL,
     dpi          VARCHAR(16) NOT NULL,
@@ -11,6 +11,7 @@ CREATE TABLE usuario (
     correo       VARCHAR(128) NOT NULL,
     imagen_dpi   VARCHAR(128) NOT NULL,
     saldo        NUMERIC NOT NULL,
+    estado		 INTEGER NOT NULL DEFAULT 1,
     CONSTRAINT usuario_pk PRIMARY KEY (id)
 );
 
@@ -24,7 +25,7 @@ CREATE TABLE amistad (
 );
 
 CREATE TABLE contador (
-    id           INTEGER NOT NULL,
+    id           INTEGER NOT NULL AUTO_INCREMENT,
     tipo         INTEGER NOT NULL,
     numero       VARCHAR(64) NOT NULL,
     usuario_id   INTEGER NOT NULL,
@@ -33,7 +34,7 @@ CREATE TABLE contador (
 );
 
 CREATE TABLE tarjeta (
-    id                INTEGER NOT NULL,
+    id                INTEGER NOT NULL AUTO_INCREMENT,
     numero            VARCHAR(24) NOT NULL,
     mes_vencimiento   INTEGER NOT NULL,
     ano_vencimiento   INTEGER NOT NULL,
@@ -44,7 +45,7 @@ CREATE TABLE tarjeta (
 );
 
 CREATE TABLE transaccion (
-    id            INTEGER NOT NULL,
+    id            INTEGER NOT NULL AUTO_INCREMENT,
     tipo          INTEGER NOT NULL,
     monto         NUMERIC NOT NULL,
     descripcion   VARCHAR(128) NOT NULL,
