@@ -12,6 +12,7 @@ CREATE TABLE usuario (
     imagen_dpi   VARCHAR(128) NOT NULL,
     saldo        NUMERIC NOT NULL,
     estado		 INTEGER NOT NULL DEFAULT 1,
+    contrasena   VARCHAR(26) NOT NULL,
     CONSTRAINT usuario_pk PRIMARY KEY (id)
 );
 
