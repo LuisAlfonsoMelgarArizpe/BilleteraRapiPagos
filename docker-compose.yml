@@ -26,6 +26,9 @@ services:
       context: ./server/billetera
     ports:
       - "3000:3000"
+    volumes:
+      - /home/ubuntu/BilleteraRapiPagos/server/billetera/:/usr/src/app
+    restart: always
     depends_on:
       - db
 
@@ -37,6 +40,9 @@ services:
       context: ./server/reportes
     ports:
       - "3001:3001"
+    volumes:
+      - /home/ubuntu/BilleteraRapiPagos/server/reportes/:/usr/src/app
+    restart: always
     depends_on:
       - db
 
@@ -48,6 +54,9 @@ services:
       context: ./server/trans
     ports:
       - "3002:3002"
+    volumes:
+      - /home/ubuntu/BilleteraRapiPagos/server/trans/:/usr/src/app
+    restart: always
     depends_on:
       - db
 
@@ -59,6 +68,9 @@ services:
       context: ./server/usuarios
     ports:
       - "3003:3003"
+    volumes:
+      - /home/ubuntu/BilleteraRapiPagos/server/usuarios/:/usr/src/app
+    restart: always
     depends_on:
       - db
 
@@ -70,6 +82,9 @@ services:
       context: ./server/liquidaciones
     ports:
       - "3004:3004"
+    volumes:
+      - /home/ubuntu/BilleteraRapiPagos/server/liquidaciones/:/usr/src/app
+    restart: always
     depends_on:
       - db
 

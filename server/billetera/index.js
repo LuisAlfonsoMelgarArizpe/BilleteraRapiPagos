@@ -48,7 +48,7 @@ app.post('/vincularTarjeta', (req, res) => {
       });
 
     } else {
-      res.json({ estado: 2, mensaje: "Tarjeta no encontrada/no validada" })
+      res.json({ estado: 2, mensaje: "Tarjeta no encontrada/no validada!" })
     }
 
   } catch {
