@@ -55,3 +55,5 @@ CREATE TABLE transaccion (
     CONSTRAINT transaccion_pk PRIMARY KEY (id),
     CONSTRAINT transaccion_usuario_fk FOREIGN KEY (usuario_id) REFERENCES usuario (id)
 );
+
+SET SQL_SAFE_UPDATES = 0;
