@@ -56,6 +56,31 @@ app.post('/vincularTarjeta', (req, res) => {
   }
 })
 
+app.get('/obtenerTarjetasEnlazadas', (req, res) => {
+  try {
+    let telefono = req.query.telefono;
+
+    let sql = `SELECT numero, mes_vencimiento, ano_vencimiento, cvv as 'pin' from tarjeta where usuario_id = (SELECT id FROM usuario WHERE telefono = '${telefono}');`;
+
+    con.query(sql, function (err, result) {
+      if (err) {
+
+        res.status(400).json({ mensaje: err.sqlMessage })
+
+      } else {
+        if (result.length <= 0) {
+          res.status(404).json({ mensaje: "No existen tarjetas asociadas a ese numero de telefono." })
+        } else {
+          res.status(200).json(result)
+        }
+      }
+    });
+
+  } catch {
+    res.status(400).json({ mensaje: 'Error en el request, datos inválidos.' })
+  }
+})
+
 
 app.get('/obtenerSaldo', (req, res) => {
   try {
@@ -145,13 +170,122 @@ app.post('/cambioEstado', (req, res) => {
         if (result.length <= 0) {
           res.status(404).json({ mensaje: "No existen billeteras asociadas a ese numero de telefono." })
         } else {
-          res.status(200).json({mensaje : "Se cambio el estado de el usuario."})
+          res.status(200).json({ mensaje: "Se cambio el estado de el usuario." })
         }
       }
     });
 
   } catch {
     res.status(400).json({ mensaje: 'Error en el request, datos inválidos.' });
+  }
+})
+
+app.post('/vincularContadorLuz', (req, res) => {
+  try {
+
+    let contador = req.body.contador;
+    let telefono = req.body.telefono;
+
+    let sql = `INSERT INTO contador (tipo,numero,usuario_id) VALUES (1,'${contador}',(SELECT id FROM usuario WHERE telefono = '${telefono}'))`
+    con.query(sql, function (err, result) {
+      if (err) {
+        if (err.code == "ER_DUP_ENTRY") {
+          res.status(400).json({ mensaje: "El contador ya esta vinculado al usuario." })
+        } else if (err.code == "ER_BAD_NULL_ERROR") {
+          res.status(404).json({ mensaje: "El numero de telefono no existe." })
+        } else {
+          res.status(400).json({ mensaje: err.sqlMessage })
+        }
+      } else {
+
+        res.json({ mensaje: "Vinculacion exitosa!" })
+      }
+    });
+  } catch {
+    res.status(400).json({ mensaje: 'Error en el request, datos inválidos.' })
+  }
+})
+
+app.post('/vincularContadorAgua', (req, res) => {
+  try {
+
+    let contador = req.body.contador;
+    let telefono = req.body.telefono;
+
+    let sql = `INSERT INTO contador (tipo,numero,usuario_id) VALUES (2,'${contador}',(SELECT id FROM usuario WHERE telefono = '${telefono}'))`
+    con.query(sql, function (err, result) {
+      if (err) {
+        if (err.code == "ER_DUP_ENTRY") {
+          res.status(400).json({ mensaje: "El contador ya esta vinculado al usuario." })
+        } else if (err.code == "ER_BAD_NULL_ERROR") {
+          res.status(404).json({ mensaje: "El numero de telefono no existe." })
+        } else {
+          res.status(400).json({ mensaje: err.sqlMessage })
+        }
+      } else {
+
+        res.json({ mensaje: "Vinculacion exitosa!" })
+      }
+    });
+  } catch {
+    res.status(400).json({ mensaje: 'Error en el request, datos inválidos.' })
+  }
+})
+
+
+app.get('/contadoresEnlazados', (req, res) => {
+  try {
+
+    let tipo = req.query.tipo;
+    let telefono = req.query.telefono;
+
+    let sql = `SELECT numero FROM contador where tipo = ${tipo} and usuario_id = (SELECT id FROM usuario WHERE telefono = '${telefono}');`
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.status(404).json({ mensaje: "No existe ningun contador enlazado a este numero de telefono." })
+      }
+    });
+  } catch {
+    res.status(400).json({ mensaje: 'Error en el request, datos inválidos.' })
+  }
+})
+
+app.get('/obtenerSaldoLuz', (req, res) => {
+  try {
+
+    let contador = req.query.contador;
+    let valido = true;
+    if (valido) {
+      let saldo = 100;
+      res.json({ saldo: saldo })
+
+    } else {
+      res.status(400).json("Error que viene desde el servicio de luz")
+    }
+
+  } catch {
+    res.status(400).json({ mensaje: 'Error en el request, datos inválidos.' })
+  }
+})
+
+app.get('/obtenerSaldoAgua', (req, res) => {
+  try {
+
+    let contador = req.query.contador;
+    let valido = true;
+    if (valido) {
+      let saldo = 100;
+      res.json({ saldo: saldo })
+
+    } else {
+      res.status(400).json("Error que viene desde el servicio de agua")
+    }
+
+  } catch {
+    res.status(400).json({ mensaje: 'Error en el request, datos inválidos.' })
   }
 })
 
