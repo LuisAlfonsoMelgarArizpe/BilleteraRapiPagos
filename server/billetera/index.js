@@ -10,7 +10,7 @@ app.use(bodyParser.json())
 
 
 var con = mysql.createConnection({
-  host: "13.59.43.121",
+  host: "52.14.227.185",
   user: "root",
   password: "billetera",
   database: "billetera"
@@ -26,6 +26,37 @@ con.connect(function (err) {
 app.get('/', (req, res) => {
   res.send('Billetera')
 })
+
+
+app.post('/login', (req, res) => {
+  let usuario = req.body.usuario;
+  let pass = req.body.pass;
+  if (usuario == 'admin') {
+    res.json({ mensaje: "Ok" })
+
+  } else {
+    res.json({ mensaje: "Error" })
+  }
+
+})
+
+
+app.post('/registro', (req, res) => {
+  let { usuario, pass } = req.body;
+  res.json({ mensaje: "Usuario insertado con exito" })
+})
+
+app.get('/server', (req, res) => { 
+  res.json({mensaje:"Servidor #1"})
+
+})
+
+app.get('/funcion',(req,res) => {
+  numero = Math.round(Math.random(1,100) * 100)
+  res.json({mensaje:numero})
+})
+
+
 
 app.post('/vincularTarjeta', (req, res) => {
   try {
