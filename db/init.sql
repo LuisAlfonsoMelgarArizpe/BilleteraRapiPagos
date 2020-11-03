@@ -50,7 +50,7 @@ CREATE TABLE transaccion (
     tipo          INTEGER NOT NULL,
     monto         NUMERIC NOT NULL,
     descripcion   VARCHAR(128) NOT NULL,
-    fecha         DATE NOT NULL,
+    fecha         DATETIME NOT NULL,
     usuario_id    INTEGER NOT NULL,
     CONSTRAINT transaccion_pk PRIMARY KEY (id),
     CONSTRAINT transaccion_usuario_fk FOREIGN KEY (usuario_id) REFERENCES usuario (id)
