@@ -119,3 +119,7 @@ app.get('/obtenerUsuario', (req, res) => {
     res.status(400).json({ error: '400', mensaje: 'Error en el request, datos inválidos.' })
   }
 })
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
