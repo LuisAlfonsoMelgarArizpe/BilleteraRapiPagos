@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 var con = mysql.createConnection({
-  host: "localhost",
+  host: "52.14.227.185",
   user: "root",
   password: "billetera",
   database: "billetera"

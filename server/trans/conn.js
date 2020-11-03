@@ -3,7 +3,7 @@ const util = require("util");
 
 // Create a connection to the database
 const connection = mysql.createConnection({
-  host: 'localhost',
+  host: '52.14.227.185',
   user: 'root',
   password: 'billetera',
   database: 'billetera'
