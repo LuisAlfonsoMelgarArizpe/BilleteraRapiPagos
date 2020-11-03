@@ -10,9 +10,10 @@ CREATE TABLE usuario (
     nacimiento   DATE NOT NULL,
     correo       VARCHAR(128) NOT NULL,
     imagen_dpi   VARCHAR(128) NOT NULL,
-    saldo        NUMERIC NOT NULL,
+    saldo        NUMERIC(10,2) NOT NULL,
     estado		 INTEGER NOT NULL DEFAULT 1,
     contrasena   VARCHAR(26) NOT NULL,
+    token        VARCHAR(10) ,
     CONSTRAINT usuario_pk PRIMARY KEY (id)
 );
 
@@ -41,14 +42,14 @@ CREATE TABLE tarjeta (
     ano_vencimiento   INTEGER NOT NULL,
     cvv               VARCHAR(8) NOT NULL,
     usuario_id        INTEGER NOT NULL,
-    CONSTRAINT tarjeta_pk PRIMARY KEY (id),
+    CONSTRAINT tarjeta_pk PRIMARY KEY (id,numero),
     CONSTRAINT tarjeta_usuario_fk FOREIGN KEY (usuario_id) REFERENCES usuario (id)
 );
 
 CREATE TABLE transaccion (
     id            INTEGER NOT NULL AUTO_INCREMENT,
     tipo          INTEGER NOT NULL,
-    monto         NUMERIC NOT NULL,
+    monto         NUMERIC(10,2) NOT NULL,
     descripcion   VARCHAR(128) NOT NULL,
     fecha         DATETIME NOT NULL,
     usuario_id    INTEGER NOT NULL,
