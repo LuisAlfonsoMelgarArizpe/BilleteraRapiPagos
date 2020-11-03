@@ -9,13 +9,13 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 var con = mysql.createConnection({
-  host: "13.59.43.121",
+  host: "localhost",
   user: "root",
   password: "billetera",
   database: "billetera"
 });
 
-on.connect(function (err) {
+con.connect(function (err) {
   if (err) throw err;
   console.log("Conectado a la base de datos!");
 });
