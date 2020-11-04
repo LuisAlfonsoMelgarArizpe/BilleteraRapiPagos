@@ -49,7 +49,7 @@ CREATE TABLE tarjeta (
 CREATE TABLE transaccion (
     id            INTEGER NOT NULL AUTO_INCREMENT,
     tipo          INTEGER NOT NULL,
-    monto         NUMERIC(10,2) NOT NULL,
+    monto         NUMERIC(10, 2) NOT NULL,
     descripcion   VARCHAR(128) NOT NULL,
     fecha         DATETIME NOT NULL,
     usuario_id    INTEGER NOT NULL,
