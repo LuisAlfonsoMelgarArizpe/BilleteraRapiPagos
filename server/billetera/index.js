@@ -1,5 +1,6 @@
 const express = require('express')
 var bodyParser = require('body-parser')
+var request = require('request');
 const app = express()
 const port = 3000
 var mysql = require('mysql');
@@ -18,7 +19,7 @@ var con = mysql.createConnection({
 
 
 con.connect(function (err) {
-  if (err) throw err;
+  if (err) { console.log("Error al conectar"); return; }
   console.log("Conectado a la base de datos!");
 });
 
@@ -46,14 +47,14 @@ app.post('/registro', (req, res) => {
   res.json({ mensaje: "Usuario insertado con exito" })
 })
 
-app.get('/server', (req, res) => { 
-  res.json({mensaje:"Servidor #1"})
+app.get('/server', (req, res) => {
+  res.json({ mensaje: "Servidor #1" })
 
 })
 
-app.get('/funcion',(req,res) => {
-  numero = Math.round(Math.random(1,100) * 100)
-  res.json({mensaje:numero})
+app.get('/funcion', (req, res) => {
+  numero = Math.round(Math.random(1, 100) * 100)
+  res.json({ mensaje: numero })
 })
 
 
@@ -62,25 +63,41 @@ app.post('/vincularTarjeta', (req, res) => {
   try {
     let id_usuario = req.body.id_usuario;
     let no_tarjeta = req.body.no_tarjeta;
-    let nombre_tarjeta = req.body.nombre_tarjeta;
-    let mes_vencimiento = req.body.mes_vencimiento;
-    let ano_vencimiento = req.body.ano_vencimiento;
+    let fecha_vencimiento = req.body.fecha_vencimiento;
     let pin = req.body.pin;
 
     //Validar tarjeta
-    let validar = true
 
-    if (validar) {
 
-      let sql = `INSERT INTO tarjeta(numero,mes_vencimiento,ano_vencimiento,cvv,usuario_id) VALUES('${no_tarjeta}',${mes_vencimiento},${ano_vencimiento},'${pin}',${id_usuario})`
-      con.query(sql, function (err, result) {
-        if (err) throw err;
-        res.status(200).json({ mensaje: "Tarjeta vinculada con exito!" })
-      });
+    request.post(
+      'http://35.238.13.44/validacionTarjeta',
+      { json: { card_number: no_tarjeta, fechaVencimiento: fecha_vencimiento, pin: pin } },
+      function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          console.log(body)
+          if (body.estado == true) {
+            let sql = `INSERT INTO tarjeta(numero,mes_vencimiento,ano_vencimiento,cvv,usuario_id) VALUES('${no_tarjeta}',${fecha_vencimiento.split(' ')[1]},${fecha_vencimiento.split(' ')[2]},'${pin}',${id_usuario})`
+            con.query(sql, function (err, result) {
+              if (err) {
+                if (err.code == "ER_DUP_ENTRY") {
+                  res.status(400).json({ mensaje: "La tarjeta ya esta vinculada." })
+                } else if (err.code == "ER_BAD_NULL_ERROR") {
+                  res.status(404).json({ mensaje: "Alguno de los numeros ingresados no existe." })
+                } else {
+                  res.status(400).json({ mensaje: err.sqlMessage })
+                }
+              } else {
+                res.status(200).json({ mensaje: "Tarjeta vinculada con exito!" })
+              }
+            });
+          } else {
+            res.status(200).json({ mensaje: "Tarjeta no encontrada!" })
+          }
+        }
+      }
+    );
 
-    } else {
-      res.status(200).json({ mensaje: "Tarjeta no encontrada/no validada!" })
-    }
+
 
   } catch {
     res.status(400).json({ mensaje: 'Error en el request, datos inválidos.' })
@@ -119,7 +136,7 @@ app.get('/obtenerSaldo', (req, res) => {
 
     let sql = `SELECT saldo FROM usuario WHERE telefono = ${telefono}`
     con.query(sql, function (err, result) {
-      if (err) throw err;
+      if (err) { res.status(400).json({ mensaje: err.sqlMessage }); return; }
       if (result.length > 0) {
         res.json({ saldo: result[0].saldo })
       } else {
@@ -272,7 +289,7 @@ app.get('/contadoresEnlazados', (req, res) => {
 
     let sql = `SELECT numero FROM contador where tipo = ${tipo} and usuario_id = (SELECT id FROM usuario WHERE telefono = '${telefono}');`
     con.query(sql, function (err, result) {
-      if (err) throw err;
+      if (err) { res.status(400).json({ mensaje: err.sqlMessage }); return; }
       if (result.length > 0) {
         res.json(result)
       } else {
