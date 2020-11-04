@@ -19,7 +19,7 @@ var con = mysql.createConnection({
 
 
 con.connect(function (err) {
-  if (err) throw err;
+  if (err) { console.log("Error al conectar"); return; }
   console.log("Conectado a la base de datos!");
 });
 
@@ -136,7 +136,7 @@ app.get('/obtenerSaldo', (req, res) => {
 
     let sql = `SELECT saldo FROM usuario WHERE telefono = ${telefono}`
     con.query(sql, function (err, result) {
-      if (err) throw err;
+      if (err) { res.status(400).json({ mensaje: err.sqlMessage }); return; }
       if (result.length > 0) {
         res.json({ saldo: result[0].saldo })
       } else {
@@ -289,7 +289,7 @@ app.get('/contadoresEnlazados', (req, res) => {
 
     let sql = `SELECT numero FROM contador where tipo = ${tipo} and usuario_id = (SELECT id FROM usuario WHERE telefono = '${telefono}');`
     con.query(sql, function (err, result) {
-      if (err) throw err;
+      if (err) { res.status(400).json({ mensaje: err.sqlMessage }); return; }
       if (result.length > 0) {
         res.json(result)
       } else {
