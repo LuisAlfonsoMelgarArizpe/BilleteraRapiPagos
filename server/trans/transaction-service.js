@@ -1,5 +1,5 @@
-const db = require('./conn')
-
+const db = require('./conn');
+const axios = require('axios').default;
 
 const postTransferenciaBilleteras = async (req, res) => {
     try {
@@ -64,9 +64,14 @@ const putRecargar = async (req, res) => {
             return;
         }
         //REALIZAR LA RECARGA
-        await db.query(`UPDATE usuario SET saldo = ${usuario[0].saldo + body.monto} WHERE id = ${usuario[0].id}`)
-        await db.query(`INSERT INTO transaccion(tipo, monto, descripcion, fecha, usuario_id) VALUES (0, ${body.monto}, 'Recarga desde ${body.numero.replace(/^.{3}/g, 'XXX')}', NOW(), ${usuario[0].id})`);
-        res.status(200).json({ mensaje: 'OK' });
+        const resp = await axios.post('http://35.238.13.44/debito', { numeroTarjeta: parseInt(tarjeta[0].numero), monto: body.monto });
+        if (resp.data.estado) {
+            await db.query(`UPDATE usuario SET saldo = ${usuario[0].saldo + body.monto} WHERE id = ${usuario[0].id}`)
+            await db.query(`INSERT INTO transaccion(tipo, monto, descripcion, fecha, usuario_id) VALUES (0, ${body.monto}, 'Recarga desde ${body.numero.replace(/^.{3}/g, 'XXX')}', NOW(), ${usuario[0].id})`);
+            res.status(200).json({ mensaje: 'OK' });
+        } else {
+            res.status(400).json({ mensaje: 'Tarjeta inválida.' });
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({ mensaje: error });
