@@ -2,7 +2,7 @@ const mysql = require("mysql");
 const util = require("util");
 
 // Create a connection to the database
-const connection = mysql.createConnection({
+const connection = mysql.createPool({
   host: '52.14.227.185',
   user: 'root',
   password: 'billetera',
@@ -10,10 +10,10 @@ const connection = mysql.createConnection({
 });
 
 // open the MySQL connection
-connection.connect(error => {
+/*connection.connect(error => {
   if (error) throw error;
   console.log("Successfully connected to the database.");
-});
+});*/
 
 connection.query = util.promisify(connection.query);
 
