@@ -16,6 +16,9 @@ app.get('/', (req, res) => {
 app.post('/transferencia', transactionServices.postTransferenciaBilleteras);
 app.put('/retiro', transactionServices.putRetirarSaldo);
 app.put('/recargar', transactionServices.putRecargar);
+app.get('/servicioluz', transactionServices.getCuentasLuzPendientes);
+app.post('/servicioluz', transactionServices.pagoLuz);
+app.post('/servicioagua', transactionServices.pagoAgua);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
